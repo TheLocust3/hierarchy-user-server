@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/', (req: express.Request, res: express.Response) => {
   User.findOne({ email: req.body.email }, function(err, user) {
     if (err || _.isNull(user)) {
-      res.status(403);
+      res.status(401);
       res.json({ error: 'Incorrect email or password' });
       return;
     }
@@ -18,12 +18,12 @@ router.post('/', (req: express.Request, res: express.Response) => {
       res.json({
         user: {
           id: user._id,
-          email: user.email,
-          token: generateToken(user._id)
-        }
+          email: user.email
+        },
+        token: generateToken(user._id)
       });
     } else {
-      res.status(403);
+      res.status(401);
       res.json({ error: 'Incorrect email or password' });
     }
   });

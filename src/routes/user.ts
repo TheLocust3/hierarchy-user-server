@@ -11,7 +11,7 @@ router.get('/', (req: express.Request, res: express.Response) => {
       res.json({ user: { id: user._id, email: user.email, name: 'Jake Kinsella' } });
     })
     .catch(() => {
-      res.status(403);
+      res.status(401);
       res.json({ error: 'Incorrect email or password' });
     });
 });
@@ -23,7 +23,7 @@ router.patch('/', (req: express.Request, res: express.Response) => {
       res.json({ user: { email: 'jake.kinsella@gmail.com', name: 'Jake Kinsella' } });
     })
     .catch(() => {
-      res.status(403);
+      res.status(401);
       res.json({ error: 'Incorrect email or password' });
     });
 });

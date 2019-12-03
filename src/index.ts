@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import passport from 'passport';
-import bodyParser from 'body-parser';
 
 import dbConfig from './config/database';
 import strategy from './config/passport';
