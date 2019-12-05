@@ -32,7 +32,6 @@ router.post('/', (req: express.Request, res: express.Response) => {
 
 router.patch('/password', (req: express.Request, res: express.Response) => {
   auth(req).then(async (user: IUser) => {
-    console.log(req.body.password);
     await User.updateOne({ _id: user._id }, { password: generateHash(req.body.password) });
     const u = await User.findById(user._id);
 
