@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { IUser } from '../models/user';
+import User, { IUser } from '../models/user';
 import { auth } from '../utils/auth';
 
 const router = express.Router();
@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', (req: express.Request, res: express.Response) => {
   auth(req)
     .then((user: IUser) => {
-      res.json({ user: { id: user._id, email: user.email, name: 'Jake Kinsella' } });
+      res.json({ user: { id: user._id, email: user.email } });
     })
     .catch(() => {
       res.status(401);
@@ -18,9 +18,11 @@ router.get('/', (req: express.Request, res: express.Response) => {
 
 router.patch('/', (req: express.Request, res: express.Response) => {
   auth(req)
-    .then((user: IUser) => {
-      // TODO: edit user
-      res.json({ user: { email: 'jake.kinsella@gmail.com', name: 'Jake Kinsella' } });
+    .then(async (user: IUser) => {
+      await User.updateOne({ _id: user._id }, { email: req.body.email });
+      const u = await User.findById(user._id);
+
+      res.json({ user: { id: u._id, email: u.email } });
     })
     .catch(() => {
       res.status(401);

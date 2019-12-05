@@ -2,7 +2,8 @@ import _ from 'lodash';
 import express from 'express';
 
 import { validPassword, generateToken } from '../utils/auth';
-import User from '../models/user';
+import User, { IUser } from '../models/user';
+import { auth, generateHash } from '../utils/auth';
 
 const router = express.Router();
 
@@ -30,8 +31,13 @@ router.post('/', (req: express.Request, res: express.Response) => {
 });
 
 router.patch('/password', (req: express.Request, res: express.Response) => {
-  // TODO: change user password
-  res.json({ user: { email: 'jake.kinsella@gmail.com', name: 'Jake Kinsella' } });
+  auth(req).then(async (user: IUser) => {
+    console.log(req.body.password);
+    await User.updateOne({ _id: user._id }, { password: generateHash(req.body.password) });
+    const u = await User.findById(user._id);
+
+    res.json({ user: { id: u._id, email: u.email } });
+  });
 });
 
 export default router;
